@@ -24,8 +24,39 @@ void Board::resetCells() {
 
 vector<Crawler*> Board::getCrawlers() const {}
 
-void Board::initializeBoard(const string &fileName) {
+void parseCrawler(Crawler& crawler, const string& line) {
+    string temp = "";
+    Position pos = Position();
+    stringstream ss(line);
+    getline(ss, temp, ',');
+    getline(ss, temp, ',');
+    crawler.setId(stoi(temp));
+    getline(ss, temp, ',');
+    pos.x = stoi(temp);
+    getline(ss, temp, ',');
+    pos.y = stoi(temp);
+    crawler.setPosition(pos);
+    getline(ss, temp, ',');
+    const auto dir = static_cast<Direction>(stoi(temp));
+    crawler.setDirection(dir);
+    getline(ss, temp, ',');
+    crawler.setSize(stoi(temp));
+}
 
+void Board::initializeBoard(const string& filename) {
+    ifstream file(filename);
+    if(file) {
+        string line;
+        while(!file.eof()) {
+            getline(file, line);
+            auto *crawler = new Crawler();
+            parseCrawler(*crawler, line);
+            crawlers.push_back(crawler);
+            cells[crawler->getPosition().x][crawler->getPosition().y].push_back(crawler);
+        }
+    } else {
+        cout << "File could not be opened" << endl;
+    }
 }
 
 void Board::displayBugs() const {

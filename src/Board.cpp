@@ -82,6 +82,16 @@ void Board::tap() {
 }
 
 void Board::displayLifeHistory() const {
+    for(auto& crawler : crawlers) {
+        cout << "Details: ";
+        crawler->display();
+        cout << "Path: ";
+        for(const auto& way : crawler->getPath()) {
+            cout << "(" << way.x << ", " << way.y << ")";
+        }
+        cout << endl;
+        cout << endl;
+    }
 }
 
 void Board::displayCells() const {

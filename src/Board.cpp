@@ -52,7 +52,7 @@ void Board::initializeBoard(const string& filename) {
             auto *crawler = new Crawler();
             parseCrawler(*crawler, line);
             crawlers.push_back(crawler);
-            cells[crawler->getPosition().x][crawler->getPosition().y].push_back(crawler);
+            cells[crawler->getPosition().y*10+crawler->getPosition().x].push_back(crawler);
         }
     } else {
         cout << "File could not be opened" << endl;
@@ -73,8 +73,8 @@ void Board::tap() {
     for(auto& crawler : crawlers) {
         if(crawler->getAlive()) {
             crawler->move();
-            Position pos = crawler->getPosition();
-            cells[pos.x][pos.y].push_back(crawler);
+            int pos = crawler->getPosition().y*10+crawler->getPosition().x;
+            cells[pos].push_back(crawler);
         }
     }
     fight();
@@ -87,5 +87,31 @@ void Board::displayCells() const {
 }
 
 void Board::fight() {
+    for(auto i = 0; i < std::size(cells); i++) {
+        if(cells[i].size() > 1) {
+            cout << "FIGHT!" << endl;
+            cout <<"On cell (" << i%10 << ", " << i/10 << ") between ";
+            Crawler* winner = nullptr;
+            int total_size = 0;
+            for(const auto& crawler : cells[i]) {
+                if (winner == nullptr || crawler->getSize() > winner->getSize()) {
+                    winner = crawler;
+                }
+                total_size += crawler->getSize();
+                cout << crawler->getId() << " ";
+            }
+            if(winner != nullptr) {
+                cout << endl << winner->getId() << " have won!" << endl;
+                winner->setSize(total_size);
+                for(const auto& crawler : cells[i]) {
+                    if(crawler != winner) {
+                        crawler->setAlive(false);
+                        deadCrawlers.push_back(crawler);
+                    }
+                }
+            }
+            cout << endl;
+        }
+    }
 }
 

@@ -29,8 +29,39 @@ void Crawler::display() const {
 
 }
 
-bool Crawler::isWayBlocked() const {
+bool Crawler::isWayBlocked() const{
+    int x = this->getPosition().x;
+    int y = this->getPosition().y;
+    Direction direction = this->getDirection();
+
+    switch(direction) {
+        case NORTH:
+            return y==9;
+        case SOUTH:
+            return y==0;
+        case EAST:
+            return x==9;
+        case WEST:
+            return x==0;
+        default:
+            return false;
+    }
 }
 
 void Crawler::move() {
+    if(this->isWayBlocked()) {
+        this->setDirection(static_cast<Direction>(1 + rand() % 4));
+        this->move();
+    }
+    else {
+        Position pos = this->getPosition();
+        switch (this->getDirection()) {
+            case NORTH: pos.y += 1; break;
+            case SOUTH: pos.y -= 1; break;
+            case EAST:  pos.x += 1; break;
+            case WEST:  pos.x -= 1; break;
+        }
+        this->setPosition(pos);
+        this->path.push_back(this->getPosition());
+    }
 }

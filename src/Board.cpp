@@ -60,7 +60,7 @@ void Board::initializeBoard(const string& filename) {
 }
 
 void Board::displayBugs() const {
-
+z
 }
 
 void Board::setCrawlers(vector<Crawler *> crawlers) {
@@ -70,6 +70,15 @@ Crawler * Board::getCrawler(const int &id) const {
 }
 
 void Board::tap() {
+    resetCells();
+    for(auto& crawler : crawlers) {
+        if(crawler->getAlive()) {
+            crawler->move();
+            Position pos = crawler->getPosition();
+            cells[pos.x][pos.y].push_back(crawler);
+        }
+    }
+    fight();
 }
 
 void Board::displayLifeHistory() const {

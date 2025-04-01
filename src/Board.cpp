@@ -60,7 +60,6 @@ void Board::initializeBoard(const string& filename) {
 }
 
 void Board::displayBugs() const {
-z
 }
 
 void Board::setCrawlers(vector<Crawler *> crawlers) {

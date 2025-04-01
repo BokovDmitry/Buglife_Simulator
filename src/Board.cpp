@@ -66,6 +66,12 @@ void Board::displayBugs() const {
 }
 
 Crawler* Board::getCrawler(const int& id) const {
+    for(auto& crawler : crawlers) {
+        if(crawler->getId() == id) {
+            return crawler;
+        }
+    }
+    return nullptr;
 }
 
 void Board::setCrawlers(vector<Crawler *> crawlers) {

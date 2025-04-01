@@ -1,10 +1,10 @@
 #include "Board.h"
 
-Board::Board(vector<Crawler*> crawlers):crawlers(move(crawlers)), cells(10, vector<vector<Crawler*>>(10)) {
+Board::Board(vector<Crawler*> crawlers):crawlers(move(crawlers)) {
     srand(time(0));
 };
 
-Board::Board() : cells(10, vector<vector<Crawler*>>(10)) {
+Board::Board() {
     srand(time(0));
 }
 
@@ -15,10 +15,8 @@ Board::~Board() {
 }
 
 void Board::resetCells() {
-    for (int x = 0; x < width; x++) {
-        for (int y = 0; y < height; y++) {
-            cells[x][y].clear();  // Clear each cell
-        }
+    for(int x = 0; x < 100; x++) {
+        cells[x].clear();  // Clear each cell
     }
 }
 

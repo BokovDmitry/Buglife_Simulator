@@ -94,7 +94,22 @@ void Board::displayLifeHistory() const {
     }
 }
 
-void Board::displayCells() const {
+void Board::displayCells() const{
+    for(int y = 0; y < height; y++) {
+        for(int x = 0; x < width; x++) {
+            cout << "(" << x << ", " << y << ") - ";
+            if(!cells[x][y].empty()) {
+                cout << "Bugs: " << endl;
+                for(auto& crawler : cells[x][y]) {
+                    crawler->display();
+                }
+            }
+            else
+            {
+                cout << "Cell is empty" << endl;
+            }
+        }
+    }
 }
 
 void Board::fight() {

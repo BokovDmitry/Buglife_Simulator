@@ -113,3 +113,13 @@ void Board::fight() {
     }
 }
 
+void Board::runSimulation() {
+    while(deadCrawlers.size() != crawlers.size()-1) {
+        tap();
+        // displayBugs();
+        this_thread::sleep_for(chrono::milliseconds(100));
+    }
+    cout << "Simulation complete" << endl;
+    displayBugs();
+}
+

@@ -5,6 +5,8 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <chrono>
+#include <thread>
 
 #include "Crawler.h"
 
@@ -40,6 +42,8 @@ public:
     void resetCells();
 
     void fight();
+
+    void runSimulation();
 };
 
 #endif //BOARD_H

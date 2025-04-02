@@ -5,6 +5,8 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <chrono>
+#include <thread>
 
 #include "Crawler.h"
 
@@ -14,7 +16,8 @@ class Board {
     const int width = 10;
     const int height = 10;
     vector<Crawler*> crawlers;
-    vector<vector<vector<Crawler*>>> cells;
+    vector<Crawler*> deadCrawlers;
+    std::vector<Crawler* > cells[100];
 
 public:
     explicit Board(vector<Crawler*> crawlers);
@@ -39,6 +42,8 @@ public:
     void resetCells();
 
     void fight();
+
+    void runSimulation();
 };
 
 #endif //BOARD_H

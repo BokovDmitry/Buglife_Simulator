@@ -1,10 +1,10 @@
 #include "Board.h"
 
-Board::Board(vector<Crawler*> crawlers):crawlers(move(crawlers)), cells(10, vector<vector<Crawler*>>(10)) {
+Board::Board(vector<Crawler*> crawlers):crawlers(move(crawlers)) {
     srand(time(0));
 };
 
-Board::Board() : cells(10, vector<vector<Crawler*>>(10)) {
+Board::Board() {
     srand(time(0));
 }
 
@@ -15,10 +15,8 @@ Board::~Board() {
 }
 
 void Board::resetCells() {
-    for (int x = 0; x < width; x++) {
-        for (int y = 0; y < height; y++) {
-            cells[x][y].clear();  // Clear each cell
-        }
+    for(int x = 0; x < 100; x++) {
+        cells[x].clear();  // Clear each cell
     }
 }
 
@@ -52,7 +50,7 @@ void Board::initializeBoard(const string& filename) {
             auto *crawler = new Crawler();
             parseCrawler(*crawler, line);
             crawlers.push_back(crawler);
-            cells[crawler->getPosition().x][crawler->getPosition().y].push_back(crawler);
+            cells[crawler->getPosition().y*10+crawler->getPosition().x].push_back(crawler);
         }
     } else {
         cout << "File could not be opened" << endl;
@@ -79,6 +77,15 @@ void Board::setCrawlers(vector<Crawler *> crawlers) {
 }
 
 void Board::tap() {
+    resetCells();
+    for(auto& crawler : crawlers) {
+        if(crawler->getAlive()) {
+            crawler->move();
+            int pos = crawler->getPosition().y*10+crawler->getPosition().x;
+            cells[pos].push_back(crawler);
+        }
+    }
+    fight();
 }
 
 void Board::displayLifeHistory() const {
@@ -94,24 +101,45 @@ void Board::displayLifeHistory() const {
     }
 }
 
-void Board::displayCells() const{
-    for(int y = 0; y < height; y++) {
-        for(int x = 0; x < width; x++) {
-            cout << "(" << x << ", " << y << ") - ";
-            if(!cells[x][y].empty()) {
-                cout << "Bugs: " << endl;
-                for(auto& crawler : cells[x][y]) {
-                    crawler->display();
+void Board::displayCells() const {
+}
+
+void Board::fight() {
+    for(auto i = 0; i < std::size(cells); i++) {
+        if(cells[i].size() > 1) {
+            cout << "FIGHT!" << endl;
+            cout <<"On cell (" << i%10 << ", " << i/10 << ") between ";
+            Crawler* winner = nullptr;
+            int total_size = 0;
+            for(const auto& crawler : cells[i]) {
+                if (winner == nullptr || crawler->getSize() > winner->getSize()) {
+                    winner = crawler;
+                }
+                total_size += crawler->getSize();
+                cout << crawler->getId() << " ";
+            }
+            if(winner != nullptr) {
+                cout << endl << winner->getId() << " have won!" << endl;
+                winner->setSize(total_size);
+                for(const auto& crawler : cells[i]) {
+                    if(crawler != winner) {
+                        crawler->setAlive(false);
+                        deadCrawlers.push_back(crawler);
+                    }
                 }
             }
-            else
-            {
-                cout << "Cell is empty" << endl;
-            }
+            cout << endl;
         }
     }
 }
 
-void Board::fight() {
+void Board::runSimulation() {
+    while(deadCrawlers.size() != crawlers.size()-1) {
+        tap();
+        // displayBugs();
+        this_thread::sleep_for(chrono::milliseconds(100));
+    }
+    cout << "Simulation complete" << endl;
+    displayBugs();
 }
 

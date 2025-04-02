@@ -94,7 +94,7 @@ void Board::displayLifeHistory() const {
         crawler->display();
         cout << "Path: ";
         for(const auto& way : crawler->getPath()) {
-            cout << "(" << way.x << ", " << way.y << ")";
+            cout << "(" << way.x << "," << way.y << ")";
         }
         cout << endl;
         cout << endl;

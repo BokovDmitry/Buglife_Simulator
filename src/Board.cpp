@@ -90,14 +90,20 @@ void Board::fight() {
             cout << "FIGHT!" << endl;
             cout <<"On cell (" << i%10 << ", " << i/10 << ") between ";
             Crawler* winner = nullptr;
+            vector<Crawler*> temp = {};
             int total_size = 0;
             for(const auto& crawler : cells[i]) {
-                if (winner == nullptr || crawler->getSize() > winner->getSize()) {
-                    winner = crawler;
+                if (temp.empty() || crawler->getSize() > temp[0]->getSize()) {
+                    temp.clear();
+                    temp.push_back(crawler);
+                }else if(!temp.empty() && crawler->getSize() == temp[0]->getSize()) {
+                    temp.push_back(crawler);
                 }
                 total_size += crawler->getSize();
                 cout << crawler->getId() << " ";
             }
+            winner = temp[rand()%temp.size()];
+
             if(winner != nullptr) {
                 cout << endl << winner->getId() << " have won!" << endl;
                 winner->setSize(total_size);

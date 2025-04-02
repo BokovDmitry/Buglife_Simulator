@@ -101,7 +101,20 @@ void Board::displayLifeHistory() const {
     }
 }
 
-void Board::displayCells() const {
+void Board::displayCells() const{
+    for(auto i = 0; i < size(cells); i++) {
+        cout << "Cell {X: " << (i%10) <<", Y: " << (i/10) << "} - ";
+        if(!cells[i].empty()) {
+            cout << "Bugs: " << endl;
+            for(auto& crawler : cells[i]) {
+                crawler->display();
+            }
+        }
+        else
+        {
+            cout << "Cell is empty" << endl;
+        }
+    }
 }
 
 void Board::fight() {

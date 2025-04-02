@@ -13,6 +13,7 @@ Position Crawler::getPosition() const {return this->position;}
 Direction Crawler::getDirection() const {return this->direction;}
 bool Crawler::getAlive() const {return this->alive;}
 list<Position> Crawler::getPath() const {return this->path;}
+int Crawler::getEatenBy() const {return this->eatenBy;}
 
 void Crawler::setId(const int& id) {this->id = id;}
 void Crawler::setSize(const int& size) {this->size = size;}
@@ -20,6 +21,7 @@ void Crawler::setPosition(const Position& position) {this->position = position;}
 void Crawler::setDirection(const Direction& direction) {this->direction = direction;}
 void Crawler::setAlive(const bool& alive) {this->alive = alive;}
 void Crawler::setPath(const list<Position>& path) {this->path = path;}
+void Crawler::setEatenBy(const int& id) {this->eatenBy = id;}
 
 void Crawler::display() const {
     string alive = getAlive() ? "Alive" : "Dead";

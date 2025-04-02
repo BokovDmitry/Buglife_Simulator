@@ -97,6 +97,9 @@ void Board::displayLifeHistory() const {
             cout << "(" << way.x << "," << way.y << ")";
         }
         cout << endl;
+        if (!crawler->getAlive()) {
+            cout << "Eaten by: " << crawler->getEatenBy() << endl;
+        }
         cout << endl;
     }
 }
@@ -137,6 +140,7 @@ void Board::fight() {
                 for(const auto& crawler : cells[i]) {
                     if(crawler != winner) {
                         crawler->setAlive(false);
+                        crawler->setEatenBy(winner->getId());
                         deadCrawlers.push_back(crawler);
                     }
                 }

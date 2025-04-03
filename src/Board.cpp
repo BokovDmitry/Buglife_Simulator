@@ -58,12 +58,16 @@ void Board::initializeBoard(const string& filename) {
 }
 
 void Board::displayBugs() const {
+    for(auto& crawler : crawlers) {
+        crawler->display();
+    }
+}
+
+Crawler* Board::getCrawler(const int& id) const {
 }
 
 void Board::setCrawlers(vector<Crawler *> crawlers) {
-}
-
-Crawler * Board::getCrawler(const int &id) const {
+    this->crawlers = move(crawlers);
 }
 
 void Board::tap() {

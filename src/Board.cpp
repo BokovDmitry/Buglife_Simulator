@@ -64,6 +64,12 @@ void Board::displayBugs() const {
 }
 
 Crawler* Board::getCrawler(const int& id) const {
+    for(auto& crawler : crawlers) {
+        if(crawler->getId() == id) {
+            return crawler;
+        }
+    }
+    return nullptr;
 }
 
 void Board::setCrawlers(vector<Crawler *> crawlers) {
@@ -83,9 +89,35 @@ void Board::tap() {
 }
 
 void Board::displayLifeHistory() const {
+    for(auto& crawler : crawlers) {
+        cout << "Details: ";
+        crawler->display();
+        cout << "Path: ";
+        for(const auto& way : crawler->getPath()) {
+            cout << "(" << way.x << "," << way.y << ")";
+        }
+        cout << endl;
+        if (!crawler->getAlive()) {
+            cout << "Eaten by: " << crawler->getEatenBy() << endl;
+        }
+        cout << endl;
+    }
 }
 
-void Board::displayCells() const {
+void Board::displayCells() const{
+    for(auto i = 0; i < size(cells); i++) {
+        cout << "Cell {X: " << (i%10) <<", Y: " << (i/10) << "} - ";
+        if(!cells[i].empty()) {
+            cout << "Bugs: " << endl;
+            for(auto& crawler : cells[i]) {
+                crawler->display();
+            }
+        }
+        else
+        {
+            cout << "Cell is empty" << endl;
+        }
+    }
 }
 
 void Board::fight() {
@@ -114,6 +146,7 @@ void Board::fight() {
                 for(const auto& crawler : cells[i]) {
                     if(crawler != winner) {
                         crawler->setAlive(false);
+                        crawler->setEatenBy(winner->getId());
                         deadCrawlers.push_back(crawler);
                     }
                 }

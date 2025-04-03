@@ -17,7 +17,7 @@ class Board {
     const int height = 10;
     vector<Crawler*> crawlers;
     vector<Crawler*> deadCrawlers;
-    std::vector<Crawler* > cells[100];
+    vector<Crawler* > cells[100];
 
 public:
     explicit Board(vector<Crawler*> crawlers);

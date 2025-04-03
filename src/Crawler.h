@@ -27,6 +27,7 @@ public:
     list<Position> getPath() const;
     Position getPosition() const;
     Direction getDirection() const;
+    int getOnboardPosition() const;
 
     void setId(const int& id);
     void setSize(const int& size);

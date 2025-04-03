@@ -13,6 +13,7 @@ Position Crawler::getPosition() const {return this->position;}
 Direction Crawler::getDirection() const {return this->direction;}
 bool Crawler::getAlive() const {return this->alive;}
 list<Position> Crawler::getPath() const {return this->path;}
+int Crawler::getOnboardPosition() const {return this->position.y*10+this->position.x;}
 
 void Crawler::setId(const int& id) {this->id = id;}
 void Crawler::setSize(const int& size) {this->size = size;}

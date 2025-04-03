@@ -10,13 +10,13 @@ Board::Board() {
 
 Board::~Board() {
     for (Crawler* crawler : crawlers) {
-        delete crawler;  // Free allocated memory
+        delete crawler;  
     }
 }
 
 void Board::resetCells() {
     for(int x = 0; x < 100; x++) {
-        cells[x].clear();  // Clear each cell
+        cells[x].clear();  
     }
 }
 
@@ -50,7 +50,7 @@ void Board::initializeBoard(const string& filename) {
             auto *crawler = new Crawler();
             parseCrawler(*crawler, line);
             crawlers.push_back(crawler);
-            cells[crawler->getPosition().y*10+crawler->getPosition().x].push_back(crawler);
+            cells[crawler->getOnboardPosition()].push_back(crawler);
         }
     } else {
         cout << "File could not be opened" << endl;
@@ -71,7 +71,7 @@ void Board::tap() {
     for(auto& crawler : crawlers) {
         if(crawler->getAlive()) {
             crawler->move();
-            int pos = crawler->getPosition().y*10+crawler->getPosition().x;
+            int pos = crawler->getOnboardPosition();
             cells[pos].push_back(crawler);
         }
     }

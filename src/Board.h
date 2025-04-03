@@ -13,8 +13,8 @@
 using namespace std;
 
 class Board {
-    const int width = 10;
-    const int height = 10;
+    const int width = WIDTH;
+    const int height = HEIGHT;
     vector<Crawler*> crawlers;
     vector<Crawler*> deadCrawlers;
     vector<Crawler* > cells[100];

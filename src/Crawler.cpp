@@ -2,6 +2,9 @@
 
 #include <iomanip>
 
+const int WIDTH = 10;
+const int HEIGHT = 10;
+
 Crawler::Crawler(){}
 
 Crawler::Crawler(int id, int size, Position position, Direction direction)
@@ -14,7 +17,7 @@ Direction Crawler::getDirection() const {return this->direction;}
 bool Crawler::getAlive() const {return this->alive;}
 list<Position> Crawler::getPath() const {return this->path;}
 int Crawler::getEatenBy() const {return this->eatenBy;}
-int Crawler::getOnboardPosition() const {return this->position.y*10+this->position.x;}
+int Crawler::getOnboardPosition() const {return this->position.y*WIDTH+this->position.x;}
 
 void Crawler::setId(const int& id) {this->id = id;}
 void Crawler::setSize(const int& size) {this->size = size;}
@@ -39,11 +42,11 @@ bool Crawler::isWayBlocked() const{
 
     switch(direction) {
         case NORTH:
-            return y==9;
+            return y==HEIGHT-1;
         case SOUTH:
             return y==0;
         case EAST:
-            return x==9;
+            return x==WIDTH-1;
         case WEST:
             return x==0;
         default:

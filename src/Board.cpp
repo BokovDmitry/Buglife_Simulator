@@ -15,7 +15,7 @@ Board::~Board() {
 }
 
 void Board::resetCells() {
-    for(int x = 0; x < 100; x++) {
+    for(int x = 0; x < (WIDTH*HEIGHT); x++) {
         cells[x].clear();  
     }
 }
@@ -106,11 +106,12 @@ void Board::displayLifeHistory() const {
 
 void Board::displayCells() const{
     for(auto i = 0; i < size(cells); i++) {
-        cout << "Cell {X: " << (i%10) <<", Y: " << (i/10) << "} - ";
+        cout << "Cell {X: " << (i%WIDTH) <<", Y: " << (i/WIDTH) << "} - ";
         if(!cells[i].empty()) {
             cout << "Bugs: " << endl;
             for(auto& crawler : cells[i]) {
-                crawler->display();
+                if(crawler->getAlive())
+                    crawler->display();
             }
         }
         else
@@ -124,7 +125,7 @@ void Board::fight() {
     for(auto i = 0; i < std::size(cells); i++) {
         if(cells[i].size() > 1) {
             cout << "FIGHT!" << endl;
-            cout <<"On cell (" << i%10 << ", " << i/10 << ") between ";
+            cout <<"On cell (" << i%WIDTH << ", " << i/WIDTH << ") between ";
             Crawler* winner = nullptr;
             vector<Crawler*> temp = {};
             int total_size = 0;

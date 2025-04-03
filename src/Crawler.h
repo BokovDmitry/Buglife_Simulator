@@ -9,6 +9,9 @@
 
 using namespace std;
 
+extern const int WIDTH;
+extern const int HEIGHT;
+
 class Crawler {
     int id;
     int size;

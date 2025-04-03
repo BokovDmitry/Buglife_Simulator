@@ -7,6 +7,7 @@
 #include <sstream>
 #include <chrono>
 #include <thread>
+#include <ctime>
 
 #include "Crawler.h"
 
@@ -17,7 +18,7 @@ class Board {
     const int height = HEIGHT;
     vector<Crawler*> crawlers;
     vector<Crawler*> deadCrawlers;
-    vector<Crawler* > cells[100];
+    vector<Crawler*> cells[100];
 
 public:
     explicit Board(vector<Crawler*> crawlers);
@@ -44,6 +45,8 @@ public:
     void fight();
 
     void runSimulation();
+
+    void writeToFile(const string& fileName) const;
 };
 
 #endif //BOARD_H

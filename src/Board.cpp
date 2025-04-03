@@ -157,13 +157,31 @@ void Board::fight() {
     }
 }
 
+void Board::writeToFile(const string &fileName) const {
+    ofstream out(fileName);
+    if(out) {
+        for(auto crawler : crawlers) {
+            out << crawler -> getId() << " :";
+            for(auto& pos : crawler->getPath()) {
+                out << " (" << pos.x << ", " << pos.y << ")";
+            }
+            if(crawler->getEatenBy() != -1)
+                out << " Eaten By: " << crawler->getEatenBy() << endl;
+        }
+        cout << "Life history successfully written to " << fileName << endl;
+    } else {
+        cout << "File could not be opened" << endl;
+    }
+
+}
+
+
 void Board::runSimulation() {
     while(deadCrawlers.size() != crawlers.size()-1) {
         tap();
-        // displayBugs();
         this_thread::sleep_for(chrono::milliseconds(100));
     }
-    cout << "Simulation complete" << endl;
+    writeToFile("data/bugs_life_history_date_time.out");
     displayBugs();
 }
 

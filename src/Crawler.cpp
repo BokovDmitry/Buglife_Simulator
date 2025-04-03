@@ -49,15 +49,19 @@ bool Crawler::isWayBlocked() const{
             return x==WIDTH-1;
         case WEST:
             return x==0;
-        default:
-            return false;
     }
+    return false;
 }
 
 void Crawler::move() {
-    if(this->isWayBlocked()) {
-        this->setDirection(static_cast<Direction>(1 + rand() % 4));
-        this->move();
+    if (this->isWayBlocked()) {
+        for (int i = 0; i < 4; i++) {
+            auto newDir = static_cast<Direction>(1 + rand() % 4);
+            this->setDirection(newDir);
+            if (!this->isWayBlocked()) {
+                break;
+            }
+        }
     }
     else {
         Position pos = this->getPosition();

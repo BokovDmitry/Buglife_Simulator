@@ -13,8 +13,8 @@ extern const int WIDTH;
 extern const int HEIGHT;
 
 class Crawler {
-    int id;
-    int size;
+    int id{};
+    int size{};
     Position position;
     Direction direction;
     bool alive = true;

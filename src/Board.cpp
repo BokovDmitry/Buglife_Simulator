@@ -165,6 +165,8 @@ void Board::writeToFile(const string &fileName) const {
             }
             if(crawler->getEatenBy() != -1)
                 out << " Eaten By: " << crawler->getEatenBy() << endl;
+            else
+                out << endl;
         }
         cout << "Life history successfully written to " << fileName << endl;
     } else {
@@ -179,7 +181,6 @@ void Board::runSimulation() {
         tap();
         this_thread::sleep_for(chrono::milliseconds(100));
     }
-    writeToFile("data/bugs_life_history_date_time.out");
     displayBugs();
 }
 

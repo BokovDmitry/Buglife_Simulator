@@ -81,6 +81,7 @@ void menu() {
                     runSimulation(board);
                     break;
                 case 0:
+                    board.writeToFile("data/bugs_life_history_date_time.out");
                     cout << "Exiting..." << endl;
                     break;
                 default:

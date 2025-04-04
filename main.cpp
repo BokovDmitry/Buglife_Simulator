@@ -22,17 +22,19 @@ void runSimulation(Board& board) {
 
 void getCrawler (const Board& board) {
     string id;
-    do {
-        try {
-            cout << "Please, enter crawler id: ";
-            cin >> id;
-            const Crawler *crawler = board.getCrawler(stoi(id));
+    cout << "Please, enter crawler id: ";
+    cin >> id;
+
+    try {
+        const Crawler* crawler = board.getCrawler(stoi(id));
+        if (crawler) {
             crawler->display();
-            break;
-        } catch (exception e) {
-            cout << "Invalid input. Please try again." << endl;
+        } else {
+            cout << "Crawler with ID " << id << " was not found. Please check and try again!" << endl;
         }
-    } while (true);
+    } catch (const exception& e) {
+        cout << "Invalid input. Please try again." << endl;
+    }
 }
 
 void menu() {

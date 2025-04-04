@@ -29,9 +29,12 @@ void Crawler::setEatenBy(const int& id) {this->eatenBy = id;}
 
 void Crawler::display() const {
     string alive = getAlive() ? "Alive" : "Dead";
-    cout << right << "Crawler ID: " << this->getId() << setw(10) << " Size: " << this->getSize() <<
-        setw(20) << " Position: {x: " << this->getPosition().x << ", y: " << this->getPosition().y << "}" <<
-        setw(15) << " Direction: " << this->getDirection() <<setw(15) <<  " isAlive: " << alive << endl;
+    cout << left
+         << "Crawler ID: " << setw(6) << this->getId()
+         << "Size: " << setw(8) << this->getSize()
+         << "Position: {x: " << this->getPosition().x << ", y: " << this->getPosition().y << "}    "
+         << "Direction: " << setw(6) << this->getDirection()
+         << "isAlive: " << alive << endl;
 
 }
 

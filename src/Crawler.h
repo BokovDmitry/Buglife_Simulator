@@ -9,13 +9,17 @@
 
 using namespace std;
 
+extern const int WIDTH;
+extern const int HEIGHT;
+
 class Crawler {
-    int id;
-    int size;
+    int id{};
+    int size{};
     Position position;
     Direction direction;
     bool alive = true;
     list<Position> path = {};
+    int eatenBy = -1;
 
 public:
     Crawler();
@@ -27,6 +31,8 @@ public:
     list<Position> getPath() const;
     Position getPosition() const;
     Direction getDirection() const;
+    int getEatenBy() const;
+    int getOnboardPosition() const;
 
     void setId(const int& id);
     void setSize(const int& size);
@@ -34,6 +40,7 @@ public:
     void setPosition(const Position& position);
     void setDirection(const Direction& direction);
     void setPath(const list<Position>& path);
+    void setEatenBy(const int& id);
 
     void display() const;
 

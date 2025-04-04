@@ -40,15 +40,16 @@ void getCrawler (const Board& board) {
 void menu() {
     int choice;
     Board board;
-    board.initializeBoard("data/crawler-bugs.txt");
+    // board.initializeBoard("data/crawler-bugs.txt");
     do {
         cout << "\n----------MENU----------" << endl;
-        cout << "1. Display all bugs" << endl;
-        cout << "2. Display bug by ID" << endl;
-        cout << "3. TAP!" << endl;
-        cout << "4. Display Bugs' History" << endl;
-        cout << "5. Display Cells" << endl;
-        cout << "6. Run Simulation" << endl;
+        cout << "1. Initialize Bug Board" << endl;
+        cout << "2. Display all bugs" << endl;
+        cout << "3. Display bug by ID" << endl;
+        cout << "4. TAP!" << endl;
+        cout << "5. Display Bugs' History" << endl;
+        cout << "6. Display Cells" << endl;
+        cout << "7. Run Simulation" << endl;
         cout << "0. Exit" << endl;
 
         try {
@@ -57,26 +58,34 @@ void menu() {
 
             switch (choice) {
                 case 1:
-                    displayBugs(board);
+                    board.initializeBoard("data/crawler-bugs.txt");
+                    cout << "Bug board initialized successfully!" << endl;
                     break;
                 case 2:
-                    getCrawler(board);
+                    displayBugs(board);
                     break;
                 case 3:
+                    getCrawler(board);
+                    break;
+                case 4:
                     board.tap();
                     displayBugs(board);
                     break;
-                case 4:
+                case 5:
                     displayBugsHistory(board);
                     break;
-                case 5:
+                case 6:
                     displayCells(board);
                     break;
-                case 6:
+                case 7:
                     runSimulation(board);
                     break;
                 case 0:
                     cout << "Exiting..." << endl;
+                    break;
+                default:
+                    cout << "Invalid option. Please try again." << endl;
+                    break;
             }
         } catch (const std::exception& e) {
             cout << "No Such Option" << endl;

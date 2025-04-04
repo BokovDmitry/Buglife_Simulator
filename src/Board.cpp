@@ -1,11 +1,9 @@
 #include "Board.h"
 
 Board::Board(vector<Crawler*> crawlers):crawlers(move(crawlers)) {
-    srand(time(0));
 };
 
 Board::Board() {
-    srand(time(0));
 }
 
 Board::~Board() {

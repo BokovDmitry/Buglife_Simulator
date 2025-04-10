@@ -26,9 +26,8 @@ void getCrawler (const Board& board) {
     cin >> id;
 
     try {
-        const Crawler* crawler = board.getCrawler(stoi(id));
-        if (crawler) {
-            crawler->display();
+        if (Bug* bug = board.getCrawler(stoi(id))) {
+            bug->display();
         } else {
             cout << "Crawler with ID " << id << " was not found. Please check and try again!" << endl;
         }

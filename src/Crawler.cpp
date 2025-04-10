@@ -7,28 +7,17 @@ const int HEIGHT = 10;
 
 Crawler::Crawler(){}
 
-Crawler::Crawler(int id, int size, Position position, Direction direction)
-    : id(id), size(size), position(position), direction(direction){}
+Crawler::Crawler(int id, int size, Position position, Direction direction) {
+    this->setId(id);
+    this->setSize(size);
+    this->setPosition(position);
+    this->setDirection(direction);
+    this->setAlive(true);
+    this->setEatenBy(-1);
+}
 
-int Crawler::getId() const {return this->id;}
-int Crawler::getSize() const {return this->size;}
-Position Crawler::getPosition() const {return this->position;}
-Direction Crawler::getDirection() const {return this->direction;}
-bool Crawler::getAlive() const {return this->alive;}
-list<Position> Crawler::getPath() const {return this->path;}
-int Crawler::getEatenBy() const {return this->eatenBy;}
-int Crawler::getOnboardPosition() const {return this->position.y*WIDTH+this->position.x;}
-
-void Crawler::setId(const int& id) {this->id = id;}
-void Crawler::setSize(const int& size) {this->size = size;}
-void Crawler::setPosition(const Position& position) {this->position = position;}
-void Crawler::setDirection(const Direction& direction) {this->direction = direction;}
-void Crawler::setAlive(const bool& alive) {this->alive = alive;}
-void Crawler::setPath(const list<Position>& path) {this->path = path;}
-void Crawler::setEatenBy(const int& id) {this->eatenBy = id;}
-
-void Crawler::display() const {
-    string alive = getAlive() ? "Alive" : "Dead";
+void Crawler::display() {
+    const string alive = getAlive() ? "Alive" : "Dead";
     cout << left
          << "Crawler ID: " << setw(6) << this->getId()
          << "Size: " << setw(8) << this->getSize()
@@ -36,24 +25,6 @@ void Crawler::display() const {
          << "Direction: " << setw(6) << this->getDirection()
          << "isAlive: " << alive << endl;
 
-}
-
-bool Crawler::isWayBlocked() const{
-    int x = this->getPosition().x;
-    int y = this->getPosition().y;
-    Direction direction = this->getDirection();
-
-    switch(direction) {
-        case NORTH:
-            return y==HEIGHT-1;
-        case SOUTH:
-            return y==0;
-        case EAST:
-            return x==WIDTH-1;
-        case WEST:
-            return x==0;
-    }
-    return false;
 }
 
 void Crawler::move() {

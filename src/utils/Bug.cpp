@@ -2,22 +2,25 @@
 
 #include "Direction.h"
 
-const int WIDTH = 10;
-const int HEIGHT = 10;
+int Bug::getId() const {return this->id;}
+Position Bug::getPosition() const {return this->position;}
+Direction Bug::getDirection() const {return this->direction;}
+int Bug::getSize() const {return this->size;}
+bool Bug::getAlive() const {return this->alive;}
+const list<Position>& Bug::getPath() const {return this->path;}
+int Bug::getEatenBy() const {return this->eatenBy;}
 
-int Bug::getId() const { return this->id; }
-Position Bug::getPosition() const { return this->position; }
-Direction Bug::getDirection() const { return this->direction; }
-int Bug::getSize() const { return this->size; }
-bool Bug::getAlive() const { return this->alive; }
-list<Position> Bug::getPath() const { return this->path; }
+void Bug::setId(const int& id) {this->id = id;}
+void Bug::setPosition(const Position& position) {this->position = position;}
+void Bug::setDirection(const Direction& direction) {this->direction = direction;}
+void Bug::setSize(const int& size) {this->size = size;}
+void Bug::setAlive(const bool& alive) {this->alive = alive;}
+void Bug::setPath(const list<Position>& path) {this->path = path;}
+void Bug::setEatenBy(const int &eatenBy) {this->eatenBy = eatenBy;}
 
-void Bug::setId(const int& id) { this->id = id; }
-void Bug::setPosition(const Position& position) { this->position = position; }
-void Bug::setDirection(const Direction& direction) { this->direction = direction; }
-void Bug::setSize(const int& size) { this->size = size; }
-void Bug::setAlive(const bool& alive) { this->alive = alive; }
-void Bug::setPath(const list<Position>& path) { this->path = path; }
+int Bug::getOnboardPosition() const {
+    return (this->position.y * WIDTH) + this->position.x;
+}
 
 bool Bug::isWayBlocked() const {
     int x = this->getPosition().x;

@@ -1,13 +1,13 @@
 #include "Board.h"
 
-Board::Board(vector<Crawler*> crawlers):crawlers(move(crawlers)) {
+Board::Board(vector<Bug*> crawlers):crawlers(move(crawlers)) {
 };
 
 Board::Board() {
 }
 
 Board::~Board() {
-    for (Crawler* crawler : crawlers) {
+    for (Bug* crawler : crawlers) {
         delete crawler;
     }
 }
@@ -18,7 +18,9 @@ void Board::resetCells() {
     }
 }
 
-vector<Crawler*> Board::getCrawlers() const {}
+vector<Bug*> Board::getCrawlers() const {
+    return crawlers;
+}
 
 void parseCrawler(Crawler& crawler, const string& line) {
     string temp = "";
@@ -61,7 +63,7 @@ void Board::displayBugs() const {
     }
 }
 
-Crawler* Board::getCrawler(const int& id) const {
+Bug* Board::getCrawler(const int& id) const {
     for(auto& crawler : crawlers) {
         if(crawler->getId() == id) {
             return crawler;
@@ -70,16 +72,12 @@ Crawler* Board::getCrawler(const int& id) const {
     return nullptr;
 }
 
-void Board::setCrawlers(vector<Crawler *> crawlers) {
-    this->crawlers = move(crawlers);
-}
-
 void Board::tap() {
     resetCells();
     for(auto& crawler : crawlers) {
         if(crawler->getAlive()) {
             crawler->move();
-            int pos = crawler->getOnboardPosition();
+            const int pos = crawler->getOnboardPosition();
             cells[pos].push_back(crawler);
         }
     }
@@ -91,8 +89,8 @@ void Board::displayLifeHistory() const {
         cout << "Details: ";
         crawler->display();
         cout << "Path: ";
-        for(const auto& way : crawler->getPath()) {
-            cout << "(" << way.x << "," << way.y << ")";
+        for(const auto& step : crawler->getPath()) {
+            cout << "(" << step.x << "," << step.y << ")";
         }
         cout << endl;
         if (!crawler->getAlive()) {
@@ -124,8 +122,8 @@ void Board::fight() {
         if(cells[i].size() > 1) {
             cout << "FIGHT!" << endl;
             cout <<"On cell (" << i%WIDTH << ", " << i/WIDTH << ") between ";
-            Crawler* winner = nullptr;
-            vector<Crawler*> temp = {};
+            Bug* winner = nullptr;
+            vector<Bug*> temp = {};
             int total_size = 0;
             for(const auto& crawler : cells[i]) {
                 if (temp.empty() || crawler->getSize() > temp[0]->getSize()) {

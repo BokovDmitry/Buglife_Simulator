@@ -16,23 +16,23 @@ using namespace std;
 class Board {
     const int width = WIDTH;
     const int height = HEIGHT;
-    vector<Crawler*> crawlers;
-    vector<Crawler*> deadCrawlers;
-    vector<Crawler*> cells[100];
+    vector<Bug*> crawlers;
+    vector<Bug*> deadCrawlers;
+    vector<Bug*> cells[100];
 
 public:
-    explicit Board(vector<Crawler*> crawlers);
+    explicit Board(vector<Bug*> crawlers);
     Board();
     ~Board();
 
-    vector<Crawler*> getCrawlers() const;
-    void setCrawlers(vector<Crawler*> crawlers);
+    vector<Bug*> getCrawlers() const;
+    void setCrawlers(vector<Bug*> crawlers);
 
     void initializeBoard(const string& fileName);
 
     void displayBugs() const;
 
-    Crawler* getCrawler(const int& id) const;
+    Bug* getCrawler(const int& id) const;
 
     void tap();
 

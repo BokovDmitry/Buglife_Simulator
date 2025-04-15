@@ -11,4 +11,6 @@ add_executable(bls2 main.cpp
         src/utils/Direction.h
         src/utils/Position.h
         src/utils/Bug.h
-        src/utils/Bug.cpp)
+        src/utils/Bug.cpp
+        src/Knightcrawler.cpp
+        src/Knightcrawler.h)

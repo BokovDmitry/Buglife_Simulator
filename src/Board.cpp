@@ -1,5 +1,7 @@
 #include "Board.h"
 
+#include "Knightcrawler.h"
+
 Board::Board(vector<Bug*> crawlers):crawlers(move(crawlers)) {
 };
 
@@ -22,23 +24,33 @@ vector<Bug*> Board::getCrawlers() const {
     return crawlers;
 }
 
-void parseCrawler(Crawler& crawler, const string& line) {
+Bug* parseCrawler(const string& line) {
+    Bug* bug = nullptr;
     string temp = "";
     Position pos = Position();
     stringstream ss(line);
     getline(ss, temp, ',');
+
+    switch (temp[0]) {
+        case 'C': bug = new Crawler(); break;
+        case 'K': bug = new Knightcrawler(); break;
+        default: break;
+    }
+
     getline(ss, temp, ',');
-    crawler.setId(stoi(temp));
+    bug->setId(stoi(temp));
     getline(ss, temp, ',');
     pos.x = stoi(temp);
     getline(ss, temp, ',');
     pos.y = stoi(temp);
-    crawler.setPosition(pos);
+    bug->setPosition(pos);
     getline(ss, temp, ',');
     const auto dir = static_cast<Direction>(stoi(temp));
-    crawler.setDirection(dir);
+    bug->setDirection(dir);
     getline(ss, temp, ',');
-    crawler.setSize(stoi(temp));
+    bug->setSize(stoi(temp));
+
+    return bug;
 }
 
 void Board::initializeBoard(const string& filename) {
@@ -47,10 +59,9 @@ void Board::initializeBoard(const string& filename) {
         string line;
         while(!file.eof()) {
             getline(file, line);
-            auto *crawler = new Crawler();
-            parseCrawler(*crawler, line);
-            crawlers.push_back(crawler);
-            cells[crawler->getOnboardPosition()].push_back(crawler);
+            Bug *bug = parseCrawler(line);
+            crawlers.push_back(bug);
+            cells[bug->getOnboardPosition()].push_back(bug);
         }
     } else {
         cout << "File could not be opened" << endl;

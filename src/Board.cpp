@@ -1,6 +1,11 @@
 #include "Board.h"
 
+#include <SFML/Graphics.hpp>
+
 #include "Knightcrawler.h"
+
+using namespace std;
+using namespace sf;
 
 Board::Board(vector<Bug*> crawlers):crawlers(move(crawlers)) {
 };
@@ -53,7 +58,8 @@ Bug* parseCrawler(const string& line) {
     return bug;
 }
 
-void Board::initializeBoard(const string& filename) {
+void Board::initBoard(const string& filename) {
+
     ifstream file(filename);
     if(file) {
         string line;
@@ -193,4 +199,67 @@ void Board::runSimulation() {
     cout << "Simulation complete" << endl;
     displayBugs();
 }
+
+void Board::runGUI() {
+    //Window Initializing
+    constexpr int wWidth = 600;
+    constexpr int wHeight = 600;
+    RenderWindow window(VideoMode(wWidth, wHeight), "My Bug Project");
+
+    vector<RectangleShape> squares;
+
+    //Creating a Board
+    for (int row = 0; row < 10; row++) {
+        for (int col = 0; col < 10; col++) {
+            RectangleShape square(Vector2f(wWidth/WIDTH, wHeight/HEIGHT));
+            square.setFillColor(Color::White );
+            square.setOutlineThickness(3.0f);
+            square.setOutlineColor(Color::Black);
+
+            square.setPosition(Vector2f(static_cast<float>(row)*60, static_cast<float>(col)*60 ));  // top left hand corner of square
+
+            squares.push_back(square);
+        }
+    }
+
+    window.setFramerateLimit(60);
+
+    while (window.isOpen() && deadCrawlers.size() != crawlers.size()-1) {
+        Event event{};
+        while (window.pollEvent(event)) {
+            if (event.type == Event::Closed) {
+                window.close();
+            }
+        }
+
+        window.clear();
+
+        for (RectangleShape &square: squares) {
+            window.draw(square);
+        }
+
+        for (auto bug : crawlers) {
+            if(bug->getAlive()) {
+                Sprite bugSprite;
+                Texture imageTexture;
+
+                if(typeid(*bug) == typeid(Crawler))
+                    imageTexture.loadFromFile("./src/img/bug.png");
+                else if(typeid(*bug) == typeid(Knightcrawler))
+                    imageTexture.loadFromFile("./src/img/knight.png");
+
+                bugSprite.setTexture(imageTexture);
+                bugSprite.setScale((wWidth/WIDTH) / bugSprite.getGlobalBounds().width, (wHeight/HEIGHT) / bugSprite.getGlobalBounds().height);
+                bugSprite.setPosition(Vector2f(static_cast<float>(bug->getPosition().x)*60, static_cast<float>(bug->getPosition().y)*60 ));
+                window.draw(bugSprite);
+            }
+        }
+
+        tap();
+        this_thread::sleep_for(chrono::milliseconds(1000));
+
+        window.display();
+    }
+}
+
 

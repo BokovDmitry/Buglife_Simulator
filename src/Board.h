@@ -28,7 +28,7 @@ public:
     vector<Bug*> getCrawlers() const;
     void setCrawlers(vector<Bug*> crawlers);
 
-    void initializeBoard(const string& fileName);
+    void initBoard(const string& fileName);
 
     void displayBugs() const;
 
@@ -47,6 +47,8 @@ public:
     void runSimulation();
 
     void writeToFile(const string& fileName) const;
+
+    void runGUI();
 };
 
 #endif //BOARD_H

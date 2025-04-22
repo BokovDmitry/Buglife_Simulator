@@ -29,7 +29,7 @@ void Crawler::display() {
 
 void Crawler::move() {
     if (this->isWayBlocked()) {
-        for (int i = 0; i < 4; i++) {
+        while(true) {
             auto newDir = static_cast<Direction>(1 + rand() % 4);
             this->setDirection(newDir);
             if (!this->isWayBlocked()) {

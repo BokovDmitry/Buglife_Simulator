@@ -34,8 +34,6 @@ bool Knightcrawler::isWayHalfBlocked(){
         case WEST:
             return x<2 || y==9;
     }
-    const auto newDir = static_cast<Direction>(1 + rand() % 4);
-    this->setDirection(newDir);
     return false;
 }
 

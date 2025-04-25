@@ -28,24 +28,20 @@ void Crawler::display() {
 }
 
 void Crawler::move() {
-    if (this->isWayBlocked()) {
-        while(true) {
-            auto newDir = static_cast<Direction>(1 + rand() % 4);
-            this->setDirection(newDir);
-            if (!this->isWayBlocked()) {
-                break;
-            }
+    while(isWayBlocked()) {
+        auto newDir = static_cast<Direction>(1 + rand() % 4);
+        this->setDirection(newDir);
+        if (!this->isWayBlocked()) {
+            break;
         }
     }
-    else {
-        Position pos = this->getPosition();
-        switch (this->getDirection()) {
-            case NORTH: pos.y += 1; break;
-            case SOUTH: pos.y -= 1; break;
-            case EAST:  pos.x += 1; break;
-            case WEST:  pos.x -= 1; break;
-        }
-        this->setPosition(pos);
-        this->path.push_back(this->getPosition());
+    Position pos = this->getPosition();
+    switch (this->getDirection()) {
+        case NORTH: pos.y += 1; break;
+        case SOUTH: pos.y -= 1; break;
+        case EAST:  pos.x += 1; break;
+        case WEST:  pos.x -= 1; break;
     }
+    this->setPosition(pos);
+    this->path.push_back(this->getPosition());
 }

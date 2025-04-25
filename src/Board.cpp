@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Hopper.h"
 #include "Knightcrawler.h"
 
 using namespace std;
@@ -39,6 +40,7 @@ Bug* parseCrawler(const string& line) {
     switch (temp[0]) {
         case 'C': bug = new Crawler(); break;
         case 'K': bug = new Knightcrawler(); break;
+        case 'H': bug = new Hopper(2 + rand() % 3); break;
         default: break;
     }
 
@@ -153,8 +155,7 @@ void Board::fight() {
                 cout << crawler->getId() << " ";
             }
             winner = temp[rand()%temp.size()];
-
-            if(winner != nullptr) {
+                        if(winner != nullptr) {
                 cout << endl << winner->getId() << " have won!" << endl;
                 winner->setSize(total_size);
                 for(const auto& crawler : cells[i]) {
@@ -247,6 +248,8 @@ void Board::runGUI() {
                     imageTexture.loadFromFile("./src/img/bug.png");
                 else if(typeid(*bug) == typeid(Knightcrawler))
                     imageTexture.loadFromFile("./src/img/knight.png");
+                else
+                    imageTexture.loadFromFile("./src/img/hopper.png");
 
                 bugSprite.setTexture(imageTexture);
                 bugSprite.setScale((wWidth/WIDTH) / bugSprite.getGlobalBounds().width, (wHeight/HEIGHT) / bugSprite.getGlobalBounds().height);
@@ -256,10 +259,8 @@ void Board::runGUI() {
         }
 
         tap();
-        this_thread::sleep_for(chrono::milliseconds(100));
+        this_thread::sleep_for(chrono::milliseconds(1000));
 
         window.display();
     }
 }
-
-

@@ -7,8 +7,9 @@ const int HEIGHT = 10;
 
 Crawler::Crawler(){}
 
-Crawler::Crawler(int id, int size, Position position, Direction direction) {
+Crawler::Crawler(int id, string type, int size, Position position, Direction direction) {
     this->setId(id);
+    this->setType(type);
     this->setSize(size);
     this->setPosition(position);
     this->setDirection(direction);
@@ -24,7 +25,6 @@ void Crawler::display() {
          << "Position: {x: " << this->getPosition().x << ", y: " << this->getPosition().y << "}    "
          << "Direction: " << setw(6) << this->getDirection()
          << "isAlive: " << alive << endl;
-
 }
 
 void Crawler::move() {

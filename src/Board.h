@@ -42,6 +42,8 @@ public:
 
     void resetCells();
 
+    void fightAtPosition(int cellIndex);
+
     void fight();
 
     void runSimulation();

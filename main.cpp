@@ -1,7 +1,10 @@
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
 #include "src/Board.h"
 
+using namespace std;
+using namespace sf;
 using namespace std;
 
 void displayBugs(const Board& board) {
@@ -20,15 +23,18 @@ void runSimulation(Board& board) {
     board.runSimulation();
 }
 
+void runGui(Board& board) {
+    board.runGUI();
+}
+
 void getCrawler (const Board& board) {
     string id;
     cout << "Please, enter crawler id: ";
     cin >> id;
 
     try {
-        const Crawler* crawler = board.getCrawler(stoi(id));
-        if (crawler) {
-            crawler->display();
+        if (Bug* bug = board.getCrawler(stoi(id))) {
+            bug->display();
         } else {
             cout << "Crawler with ID " << id << " was not found. Please check and try again!" << endl;
         }
@@ -50,6 +56,7 @@ void menu() {
         cout << "5. Display Bugs' History" << endl;
         cout << "6. Display Cells" << endl;
         cout << "7. Run Simulation" << endl;
+        cout << "8. Run GUI" << endl;
         cout << "0. Exit" << endl;
 
         try {
@@ -58,7 +65,7 @@ void menu() {
 
             switch (choice) {
                 case 1:
-                    board.initializeBoard("data/crawler-bugs.txt");
+                    board.initBoard("data/crawler-bugs.txt");
                     cout << "Bug board initialized successfully!" << endl;
                     break;
                 case 2:
@@ -80,6 +87,9 @@ void menu() {
                 case 7:
                     runSimulation(board);
                     break;
+                case 8:
+                    runGui(board);
+                break;
                 case 0:
                     board.writeToFile("data/bugs_life_history_date_time.out");
                     cout << "Exiting..." << endl;
@@ -95,6 +105,6 @@ void menu() {
 }
 
 int main() {
-    srand(time(0));
     menu();
+    return 0;
 }

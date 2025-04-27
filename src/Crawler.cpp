@@ -7,8 +7,9 @@ const int HEIGHT = 10;
 
 Crawler::Crawler(){}
 
-Crawler::Crawler(int id, int size, Position position, Direction direction) {
+Crawler::Crawler(int id, string type, int size, Position position, Direction direction) {
     this->setId(id);
+    this->setType(type);
     this->setSize(size);
     this->setPosition(position);
     this->setDirection(direction);
@@ -24,28 +25,23 @@ void Crawler::display() {
          << "Position: {x: " << this->getPosition().x << ", y: " << this->getPosition().y << "}    "
          << "Direction: " << setw(6) << this->getDirection()
          << "isAlive: " << alive << endl;
-
 }
 
 void Crawler::move() {
-    if (this->isWayBlocked()) {
-        while(true) {
-            auto newDir = static_cast<Direction>(1 + rand() % 4);
-            this->setDirection(newDir);
-            if (!this->isWayBlocked()) {
-                break;
-            }
+    while(isWayBlocked()) {
+        auto newDir = static_cast<Direction>(1 + rand() % 4);
+        this->setDirection(newDir);
+        if (!this->isWayBlocked()) {
+            break;
         }
     }
-    else {
-        Position pos = this->getPosition();
-        switch (this->getDirection()) {
-            case NORTH: pos.y += 1; break;
-            case SOUTH: pos.y -= 1; break;
-            case EAST:  pos.x += 1; break;
-            case WEST:  pos.x -= 1; break;
-        }
-        this->setPosition(pos);
-        this->path.push_back(this->getPosition());
+    Position pos = this->getPosition();
+    switch (this->getDirection()) {
+        case NORTH: pos.y += 1; break;
+        case SOUTH: pos.y -= 1; break;
+        case EAST:  pos.x += 1; break;
+        case WEST:  pos.x -= 1; break;
     }
+    this->setPosition(pos);
+    this->path.push_back(this->getPosition());
 }

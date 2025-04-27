@@ -1,8 +1,9 @@
 #include "Hopper.h"
 
 Hopper::Hopper(int hopLength): hopLength(hopLength) {};
-Hopper::Hopper(int id, int size, Position position, Direction direction, int hopLength){
+Hopper::Hopper(int id, string type, int size, Position position, Direction direction, int hopLength){
     this->id = id;
+    this->type = type;
     this->size = size;
     this->position = position;
     this->direction = direction;

@@ -15,7 +15,9 @@ add_executable(bls2 main.cpp
         src/Knightcrawler.cpp
         src/Knightcrawler.h
         src/Hopper.cpp
-        src/Hopper.h)
+        src/Hopper.h
+        src/SuperBug.cpp
+        src/SuperBug.h)
 
 find_package(SFML 2.5 REQUIRED COMPONENTS graphics window network)
 

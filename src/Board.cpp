@@ -4,6 +4,7 @@
 
 #include "Hopper.h"
 #include "Knightcrawler.h"
+#include "SuperBug.h"
 
 using namespace std;
 using namespace sf;
@@ -38,9 +39,10 @@ Bug* parseCrawler(const string& line) {
     getline(ss, temp, ',');
 
     switch (temp[0]) {
-        case 'C': bug = new Crawler(); break;
-        case 'K': bug = new Knightcrawler(); break;
-        case 'H': bug = new Hopper(2 + rand() % 3); break;
+        case 'C': bug = new Crawler(); bug->setType("Crawler"); break;
+        case 'K': bug = new Knightcrawler(); bug->setType("KnightCrawler"); break;
+        case 'H': bug = new Hopper(2 + rand() % 3); bug->setType("Hopper"); break;
+        case 'S': bug = new SuperBug(); bug->setType("Super"); break;
         default: break;
     }
 
@@ -135,7 +137,6 @@ void Board::displayCells() const{
         }
     }
 }
-
 void Board::fight() {
     for(auto i = 0; i < std::size(cells); i++) {
         if(cells[i].size() > 1) {
@@ -171,6 +172,47 @@ void Board::fight() {
     }
 }
 
+void Board::fightAtPosition(int cellIndex) {
+    if (cells[cellIndex].size() > 1) {
+        cout << "FIGHT initiated by SuperBug!" << endl;
+        cout << "On cell (" << cellIndex % WIDTH << ", " << cellIndex / WIDTH << ") between ";
+
+        Bug* winner = nullptr;
+        vector<Bug*> temp;
+        int total_size = 0;
+
+        for (auto& crawler : cells[cellIndex]) {
+            if (temp.empty() || crawler->getSize() > temp[0]->getSize()) {
+                temp.clear();
+                temp.push_back(crawler);
+            } else if (!temp.empty() && crawler->getSize() == temp[0]->getSize()) {
+                temp.push_back(crawler);
+            }
+            total_size += crawler->getSize();
+            cout << crawler->getId() << " ";
+        }
+
+        winner = temp[rand() % temp.size()];
+        if (winner != nullptr) {
+            cout << endl << winner->getId() << " has won the SuperBug fight!" << endl;
+            winner->setSize(total_size);
+
+            for (auto& crawler : cells[cellIndex]) {
+                if (crawler != winner) {
+                    crawler->setAlive(false);
+                    crawler->setEatenBy(winner->getId());
+                    deadCrawlers.push_back(crawler);
+                }
+            }
+
+            // Only winner stays on cell
+            cells[cellIndex].clear();
+            cells[cellIndex].push_back(winner);
+        }
+        cout << endl;
+    }
+}
+
 void Board::writeToFile(const string &fileName) const {
     ofstream out(fileName);
     if(out) {
@@ -191,7 +233,6 @@ void Board::writeToFile(const string &fileName) const {
 
 }
 
-
 void Board::runSimulation() {
     while(deadCrawlers.size() != crawlers.size()-1) {
         tap();
@@ -202,64 +243,116 @@ void Board::runSimulation() {
 }
 
 void Board::runGUI() {
-    //Window Initializing
+    // Window Initializing
     constexpr int wWidth = 600;
     constexpr int wHeight = 600;
     RenderWindow window(VideoMode(wWidth, wHeight), "My Bug Project");
 
     vector<RectangleShape> squares;
-
-    //Creating a Board
+        // Creating the Board
     for (int row = 0; row < 10; row++) {
         for (int col = 0; col < 10; col++) {
-            RectangleShape square(Vector2f(wWidth/WIDTH, wHeight/HEIGHT));
-            square.setFillColor(Color::White );
+            RectangleShape square(Vector2f(wWidth / WIDTH, wHeight / HEIGHT));
+            square.setFillColor(Color::White);
             square.setOutlineThickness(3.0f);
             square.setOutlineColor(Color::Black);
-
-            square.setPosition(Vector2f(static_cast<float>(row)*60, static_cast<float>(col)*60 ));  // top left hand corner of square
-
+            square.setPosition(Vector2f(static_cast<float>(row) * 60, static_cast<float>(col) * 60));
             squares.push_back(square);
         }
     }
 
     window.setFramerateLimit(60);
 
-    while (window.isOpen() && deadCrawlers.size() != crawlers.size()-1) {
+    Bug* superBug = nullptr;
+    for (Bug* bug : crawlers) {
+        if (bug->getType() == "Super") {
+            superBug = bug;
+            break;
+        }
+    }
+
+    Clock clock; // SFML Clock for delta time
+    float tapTimer = 0.0f;
+
+    while (window.isOpen() && deadCrawlers.size() != crawlers.size() - 1) {
         Event event{};
         while (window.pollEvent(event)) {
+            if (event.type == Event::KeyPressed && superBug && superBug->getAlive()) {
+                if (event.key.code == Keyboard::Up) {
+                    if (superBug->getPosition().y > 0) {
+                        superBug->setPosition(Position(superBug->getPosition().x, superBug->getPosition().y - 1));
+                        int newCellIndex = superBug->getOnboardPosition();
+                        cells[newCellIndex].push_back(superBug);
+                        fightAtPosition(newCellIndex);
+                    }
+                }
+                if (event.key.code == Keyboard::Down) {
+                    if (superBug->getPosition().y < HEIGHT - 1) {
+                        superBug->setPosition(Position(superBug->getPosition().x, superBug->getPosition().y + 1));
+                        int newCellIndex = superBug->getOnboardPosition();
+                        cells[newCellIndex].push_back(superBug);
+                        fightAtPosition(newCellIndex);
+                    }
+                }
+                if (event.key.code == Keyboard::Left) {
+                    if (superBug->getPosition().x > 0) {
+                        superBug->setPosition(Position(superBug->getPosition().x - 1, superBug->getPosition().y));
+                        int newCellIndex = superBug->getOnboardPosition();
+                        cells[newCellIndex].push_back(superBug);
+                        fightAtPosition(newCellIndex);
+                    }
+                }
+                if (event.key.code == Keyboard::Right) {
+                    if (superBug->getPosition().x < WIDTH - 1) {
+                        superBug->setPosition(Position(superBug->getPosition().x + 1, superBug->getPosition().y));
+                        int newCellIndex = superBug->getOnboardPosition();
+                        cells[newCellIndex].push_back(superBug);
+                        fightAtPosition(newCellIndex);
+                    }
+                }
+                superBug->getPath().push_back(superBug->getPosition());
+            }
+
             if (event.type == Event::Closed) {
                 window.close();
             }
         }
 
+        float deltaTime = clock.restart().asSeconds();
+        tapTimer += deltaTime;
+
+        if (tapTimer >= 1.0f) {
+            tap();
+            tapTimer = 0.0f;
+        }
+
         window.clear();
 
-        for (RectangleShape &square: squares) {
+        for (RectangleShape& square : squares) {
             window.draw(square);
         }
 
         for (auto bug : crawlers) {
-            if(bug->getAlive()) {
+            if (bug->getAlive()) {
                 Sprite bugSprite;
                 Texture imageTexture;
 
-                if(typeid(*bug) == typeid(Crawler))
+                if (typeid(*bug) == typeid(Crawler))
                     imageTexture.loadFromFile("./src/img/bug.png");
-                else if(typeid(*bug) == typeid(Knightcrawler))
+                else if (typeid(*bug) == typeid(Knightcrawler))
                     imageTexture.loadFromFile("./src/img/knight.png");
-                else
+                else if (typeid(*bug) == typeid(Hopper))
                     imageTexture.loadFromFile("./src/img/hopper.png");
-
+                else if (typeid(*bug) == typeid(SuperBug))
+                    imageTexture.loadFromFile("./src/img/superbug.png");
                 bugSprite.setTexture(imageTexture);
-                bugSprite.setScale((wWidth/WIDTH) / bugSprite.getGlobalBounds().width, (wHeight/HEIGHT) / bugSprite.getGlobalBounds().height);
-                bugSprite.setPosition(Vector2f(static_cast<float>(bug->getPosition().x)*60, static_cast<float>(bug->getPosition().y)*60 ));
+                bugSprite.setScale((wWidth / WIDTH) / bugSprite.getGlobalBounds().width,
+                                   (wHeight / HEIGHT) / bugSprite.getGlobalBounds().height);
+                bugSprite.setPosition(Vector2f(static_cast<float>(bug->getPosition().x) * 60,
+                                               static_cast<float>(bug->getPosition().y) * 60));
                 window.draw(bugSprite);
             }
         }
-
-        tap();
-        this_thread::sleep_for(chrono::milliseconds(1000));
 
         window.display();
     }

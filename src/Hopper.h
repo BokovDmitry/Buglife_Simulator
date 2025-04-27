@@ -1,5 +1,5 @@
-#ifndef JUMPER_H
-#define JUMPER_H
+#ifndef HOPPER_H
+#define HOPPER_H
 #include "utils/Bug.h"
 #include "utils/Direction.h"
 #include "utils/Position.h"
@@ -15,7 +15,7 @@ class Hopper : public Bug {
 
 public:
     Hopper(int hopLength);
-    Hopper(int id, int size, Position position, Direction direction, int hopLength);
+    Hopper(int id, string type, int size, Position position, Direction direction, int hopLength);
 
     int getHopLength() const;
 
@@ -26,4 +26,4 @@ public:
     void move() override;
 };
 
-#endif //JUMPER_H
+#endif //HOPPER_H

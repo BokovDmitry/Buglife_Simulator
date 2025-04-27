@@ -17,7 +17,7 @@ class Crawler: public Bug {
 
 public:
     Crawler();
-    Crawler(int id, int size, Position position, Direction direction);
+    Crawler(int id, string type, int size, Position position, Direction direction);
 
     void display() override;
 
